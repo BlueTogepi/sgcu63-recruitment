@@ -1,9 +1,11 @@
 # SGCU63 Front-end/Back-end Engineer Recruitment Answers
 
 Programming Langauge: Python3
+
 Specification: python=3.7.7
 
 For Prob#2 and Prob3, built-in stardard library is used, so the answer files are uploaded alone
+
 For Prob#1, third-party libraries are used as followed:
   - beautifulsoup4=4.9.0
   - requests=2.23.0
