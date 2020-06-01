@@ -1,0 +1,50 @@
+class File:
+    def __init__(name):
+        self.name = name
+
+class Folder:
+    def __init__(name, locationName, depth, files, folders):
+        self.name = name
+        self.locationName = locationName        # roughly the __str__() of the parent folder
+        self.depth = depth
+        self.files = files
+        self.folders = folders
+    def __str__():
+        return self.locationName + "/" + self.name
+    def searchFile(folderList, fileName):
+        # assumption: any two files in the same folder will not ever be duplicated
+        if fileName in files:
+            folderList.append(self)
+        if len(self.folders) != 0:
+            for folder in folders:
+                folder.searchFile(folderList, fileName)
+
+# assumption: input string is always in correct format
+def json2Folder(jsonStr):
+    start = jsonStr.find("{")
+    end = jsonStr.rfind("}")
+    if start != -1 and end != -1:
+        return __jsonSubStr2Folder(jsonStr, start + 1, end, "", 0)
+    return None
+
+def __jsonSubStr2Folder(jsonStr, startInd, endInd, location, depth):
+    files = list()
+    folders = list()
+
+    # Finding the name of the sub element
+    frontIter = jsonStr.find("\"", startInd, endInd)
+    rearIter = jsonStr.find("\"", frontIter + 1, endInd)
+
+    while frontIter != -1 and rearIter != -1:
+        name = jsonStr[startInd + 1 : rearIter]
+
+        # Determining files array
+        if name == "_files":
+            frontIter = jsonStr.find("[", rearIter + 1, endInd)
+            rearIter = jsonStr.find("]", frontIter + 1, endInd)
+            if frontIter != -1 and rearIter != -1:
+                files = [File(e.strip().strip("\"")) for e in jsonStr[frontIter + 1 : rearIter].split(",")]
+        # Determining subfolders
+        else:
+            frontIter = jsonStr.find("{", rearIter + 1, endInd)
+            rearIter = jsonStr.find("}", frontIter + 1, endInd)
